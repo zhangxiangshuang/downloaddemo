@@ -10,24 +10,21 @@ import java.util.Scanner;
  * Hello world!
  */
 public class App {
+    static int NO;
+    static String URLHEAD;
+    static String PATHHEAD;
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        System.out.println("请输入第几集：");
-        int NO = sc.nextInt();
-        System.out.println("你输入的是：" + NO);
-        System.out.println("--------------------------------------------");
-        System.out.println("请输入第" + NO + "集对应的代码：");
-        long NOS = sc.nextLong();
-        System.out.println("你输入的代码是：" + NOS);
-
-        //public static final int NO=4;
-        //public static final String NOS="1224375653";
-        String urlhead1 = "https://v3.kjjl100.com/kz/2023/jg/1j/gcjjwsn/jcjj/";
-        //抓包的url地址
-        final String URLHEAD = urlhead1 + NO + "/index/hls/" + NOS + "/112089/";
+        System.out.println("请输入要下载的url地址：");
+        String url = sc.next();
+        System.out.println("请输入文件保存地址地址：");
+        PATHHEAD = sc.next();
+        getUrlfrom(url);
+        System.out.println(URLHEAD);
+        System.out.println(NO);
         //文件保存地址
-        final String PATHHEAD = "D:\\Download\\OneBuildVideo\\";
+        // final String PATHHEAD = "D:\\Download\\OneBuildVideo\\";
         int i = 1;
         System.out.println(getUrl(i, URLHEAD));
         System.out.println(getCode(getUrl(i, URLHEAD)));
@@ -43,7 +40,7 @@ public class App {
             System.out.println("下载结束");
             System.out.println("-------------------------------------------");
             System.out.println("开始合并TS并转换为MP4");
-            String tsFilePath = PATHHEAD + NO + "\\";
+            String tsFilePath = PATHHEAD + "\\" + NO + "\\";
             List<File> tsFiles = ConvertTsToMp4.getTSFiles(tsFilePath);
             String mp4FilePath = tsFilePath + "\\" + NO + ".mp4";
             File mp4File = ConvertTsToMp4.createMP4File(mp4FilePath);
@@ -52,6 +49,7 @@ public class App {
         }
         System.out.println("程序运行结束");
     }
+
     public static String getUrl(int i, String URLHEAD) {
         // String url = URLHEAD + i + ".ts";
         //return url;
@@ -75,4 +73,13 @@ public class App {
         int body = HttpRequest.get(url).code();
         return body == 200;
     }
+
+    public static void getUrlfrom(String url) {
+        int index = url.indexOf("/index");
+        int i = url.lastIndexOf("/", index - 1);
+        int last = url.lastIndexOf("/");
+        NO = Integer.parseInt(url.substring(i + 1, index));
+        URLHEAD = url.substring(0, last + 1);
+    }
+
 }
