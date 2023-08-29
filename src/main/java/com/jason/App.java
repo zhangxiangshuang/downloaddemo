@@ -14,40 +14,49 @@ public class App {
     static String URLHEAD;
     static String PATHHEAD;
 
+
+
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("请输入要下载的url地址：");
-        String url = sc.next();
-        System.out.println("请输入文件保存地址地址：");
-        PATHHEAD = sc.next();
-        getUrlfrom(url);
-        System.out.println(URLHEAD);
-        System.out.println(NO);
-        //文件保存地址
-        // final String PATHHEAD = "D:\\Download\\OneBuildVideo\\";
-        int i = 1;
-        System.out.println(getUrl(i, URLHEAD));
-        System.out.println(getCode(getUrl(i, URLHEAD)));
-        if (!getCode(getUrl(i, URLHEAD))) {
-            System.out.println("获取下载失败");
-        } else {
-            while (getCode(getUrl(i, URLHEAD))) {
-                System.out.println("资源url：" + getUrl(i, URLHEAD));
-                System.out.println("获取资源：" + getCode(getUrl(i, URLHEAD)));
-                DownloadFile.downloadFiles(getUrl(i, URLHEAD), getPath(i, PATHHEAD, NO));
-                i++;
+
+        while(true){
+            Scanner sc = new Scanner(System.in);
+            if(PATHHEAD == null){
+                System.out.println("请输入文件保存地址地址：");
+                PATHHEAD = sc.next();
             }
-            System.out.println("下载结束");
-            System.out.println("-------------------------------------------");
-            System.out.println("开始合并TS并转换为MP4");
-            String tsFilePath = PATHHEAD + "\\" + NO + "\\";
-            List<File> tsFiles = ConvertTsToMp4.getTSFiles(tsFilePath);
-            String mp4FilePath = tsFilePath + "\\" + NO + ".mp4";
-            File mp4File = ConvertTsToMp4.createMP4File(mp4FilePath);
-            ConvertTsToMp4.mergeTSFiles(tsFiles, mp4File);
-            ConvertTsToMp4.deleteTSFile(tsFiles);
+            System.out.println("请输入要下载的url地址：");
+            String url = sc.next();
+            getUrlfrom(url);
+            System.out.println(URLHEAD);
+            System.out.println(NO);
+            //文件保存地址
+            // final String PATHHEAD = "D:\\Download\\OneBuildVideo\\";
+            int i = 0;
+            System.out.println(getUrl(i, URLHEAD));
+            System.out.println(getCode(getUrl(i, URLHEAD)));
+            if (!getCode(getUrl(i, URLHEAD))) {
+                System.out.println("获取下载失败");
+            } else {
+                while (getCode(getUrl(i, URLHEAD))) {
+                    System.out.println("资源url：" + getUrl(i, URLHEAD));
+                    System.out.println("获取资源：" + getCode(getUrl(i, URLHEAD)));
+                    DownloadFile.downloadFiles(getUrl(i, URLHEAD), getPath(i, PATHHEAD, NO));
+                    i++;
+                }
+                System.out.println("下载结束");
+                System.out.println("-------------------------------------------");
+                System.out.println("开始合并TS并转换为MP4");
+                String tsFilePath = PATHHEAD + "\\" + NO + "\\";
+                List<File> tsFiles = ConvertTsToMp4.getTSFiles(tsFilePath);
+                String mp4FilePath = tsFilePath + "\\" + NO + ".mp4";
+                File mp4File = ConvertTsToMp4.createMP4File(mp4FilePath);
+                ConvertTsToMp4.mergeTSFiles(tsFiles, mp4File);
+                ConvertTsToMp4.deleteTSFile(tsFiles);
+            }
         }
-        System.out.println("程序运行结束");
+
+
+
     }
 
     public static String getUrl(int i, String URLHEAD) {
